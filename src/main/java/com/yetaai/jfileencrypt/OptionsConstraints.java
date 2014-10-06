@@ -5,6 +5,7 @@
  */
 package com.yetaai.jfileencrypt;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -16,16 +17,13 @@ import java.util.logging.Logger;
  * @author his20166
  */
 public class OptionsConstraints {
-    HashMap<String, Constraint> hmc = new HashMap();
+    ArrayList<Constraint> alc = new ArrayList();
     
     public boolean isBroken(String[] args) {
         Boolean result = true;
-        Set entryset = hmc.entrySet();
-        for (Map.Entry<String, Constraint> entry:hmc.entrySet()) {
+        for (Constraint c:alc) {
             try {
-                String key = entry.getKey();
-                Constraint value = entry.getValue();
-                result = result && value.isBroken(key, args);
+                result = result && c.isBroken(args);
             } catch (ConstraintException ex) {
                 Logger.getLogger(OptionsConstraints.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -33,7 +31,7 @@ public class OptionsConstraints {
         return result;
     }
     
-    public void add(String opt, Constraint c) {
-        hmc.put(opt, c);
+    public void add(Constraint c) {
+        alc.add(c);
     }    
 }

@@ -11,6 +11,6 @@ package com.yetaai.jfileencrypt;
  */
 public interface Constraint {
     
-    public boolean isBroken(String option, String[] args) throws ConstraintException;
+    public boolean isBroken(String[] args) throws ConstraintException;
     
 }

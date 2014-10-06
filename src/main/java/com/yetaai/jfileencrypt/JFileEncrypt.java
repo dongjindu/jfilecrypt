@@ -22,6 +22,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,6 +36,9 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class JFileEncrypt {
 
+    public final static String GROUP_START = "__+";
+    public final static String GROUP_CONFLICT_START = "__-";
+    
     public final static String COM_ENCRYPTION = "-e";
     public final static String COM_DECRYPTION = "-d";
     public final static String COM_OPT_REPLACE = "-r";
@@ -49,8 +53,9 @@ public class JFileEncrypt {
     public final static String COM_ODIR = "-O";
 
     public static void main(String[] args) {
-        HashMap<String, IntMinMaxConstraint> hm = new HashMap();
-        HashMap<String, String> hmnoco = new HashMap();
+        ArrayList<IntMinMaxConstraint> alcimmc = new ArrayList();
+        Hashtable<String, String> htnotco = new Hashtable();
+        ArrayList<Object> algroups = new ArrayList();
         
         ArrayList<String> al = new ArrayList();
         al.add(JFileEncrypt.COM_ENCRYPTION);
@@ -66,19 +71,43 @@ public class JFileEncrypt {
         al.add(JFileEncrypt.COM_ALGORITHM);
         al.add(JFileEncrypt.COM_ODIR);
 
-        hm.put(JFileEncrypt.COM_ENCRYPTION, new IntMinMaxConstraint(1, 10));
-        hm.put(JFileEncrypt.COM_DECRYPTION, new IntMinMaxConstraint(1, 10));
-        hm.put(JFileEncrypt.COM_OPT_REPLACE, new IntMinMaxConstraint(0, 0));
-        hm.put(JFileEncrypt.COM_OPT_RECURSIVE, new IntMinMaxConstraint(0, 0));
-        hm.put(JFileEncrypt.COM_OUT_BEFOREFIX, new IntMinMaxConstraint(1, 1));
-        hm.put(JFileEncrypt.COM_OUT_AFTERFIX, new IntMinMaxConstraint());
-        hm.put(JFileEncrypt.COM_PASSWORD, 1);
-        hm.put(JFileEncrypt.COM_PASSWORD_FILE, 1);
-        hm.put(JFileEncrypt.COM_SALT, 1);
-        hm.put(JFileEncrypt.COM_CERT_FILE, 1);
-        hm.put(JFileEncrypt.COM_ALGORITHM, 1);
-        hm.put(JFileEncrypt.COM_ODIR, 1);
+        //Integer min/max constraint
+        alcimmc.add(new IntMinMaxConstraint(JFileEncrypt.COM_ENCRYPTION, 1, 10));
+        alcimmc.add( new IntMinMaxConstraint(JFileEncrypt.COM_DECRYPTION,1, 10));
+        alcimmc.add( new IntMinMaxConstraint(JFileEncrypt.COM_OPT_REPLACE,0, 0));
+        alcimmc.add( new IntMinMaxConstraint(JFileEncrypt.COM_OPT_RECURSIVE, 0, 0));
+        alcimmc.add(new IntMinMaxConstraint(JFileEncrypt.COM_OUT_BEFOREFIX, 1, 1));
+        alcimmc.add( new IntMinMaxConstraint(JFileEncrypt.COM_OUT_AFTERFIX, 1, 1));
+        alcimmc.add(new IntMinMaxConstraint(JFileEncrypt.COM_PASSWORD, 0, 1));
+        alcimmc.add( new IntMinMaxConstraint(JFileEncrypt.COM_PASSWORD_FILE,0, 1));
+        alcimmc.add(new IntMinMaxConstraint(JFileEncrypt.COM_SALT, 0, 1));
+        alcimmc.add(new IntMinMaxConstraint(JFileEncrypt.COM_CERT_FILE, 0, 1));
+        alcimmc.add( new IntMinMaxConstraint(JFileEncrypt.COM_ALGORITHM,0, 1));
+        alcimmc.add(new IntMinMaxConstraint(JFileEncrypt.COM_ODIR, 0, 1));
 
+        //Group Constraint
+        Integer i = 0; 
+        ArrayList<String> algroup = new ArrayList();i = 1; //1
+        algroup.add(JFileEncrypt.GROUP_START + String.valueOf(i));
+        algroup.add(COM_PASSWORD);algroup.add(COM_SALT);algroup.add(COM_ALGORITHM);
+        algroups.add(algroup);
+        
+        //Group conflict Constraint
+        algroup = new ArrayList();i = 2; //2
+        algroup.add(JFileEncrypt.GROUP_CONFLICT_START + String.valueOf(i));
+        algroup.add(JFileEncrypt.COM_ENCRYPTION);algroup.add(JFileEncrypt.COM_DECRYPTION);
+        algroups.add(algroup);
+        algroup = new ArrayList();i = 3;//3
+        algroup.add(JFileEncrypt.GROUP_CONFLICT_START + String.valueOf(i));
+        algroup.add(JFileEncrypt.GROUP_START + String.valueOf(1));algroup.add(JFileEncrypt.COM_PASSWORD_FILE);
+        algroups.add(algroup);
+
+        //Mandatory Contraints
+        ArrayList<String> almc = new ArrayList();
+        almc.add(JFileEncrypt.GROUP_CONFLICT_START + String.valueOf(2));
+        almc.add(COM_SALT);
+        
+        //
         ArrayList<String> inputfiles = new ArrayList();
         Boolean breplace = false;
         String beforefix = "";
