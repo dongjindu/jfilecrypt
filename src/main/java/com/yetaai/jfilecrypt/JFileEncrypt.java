@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.yetaai.jfileencrypt;
+package com.yetaai.jfilecrypt;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -105,7 +105,7 @@ public class JFileEncrypt {
         //Mandatory Contraints
         ArrayList<String> almc = new ArrayList();
         almc.add(JFileEncrypt.GROUP_CONFLICT_START + String.valueOf(2));
-        almc.add(COM_SALT);
+        almc.add();
         
         //
         ArrayList<String> inputfiles = new ArrayList();

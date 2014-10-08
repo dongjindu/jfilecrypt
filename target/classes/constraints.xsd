@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified">
+    <xs:element name="command" type="xs:string" fixed="jfilecrypt">
+        <xs:element name="execution">
+            <xs:complextype>
+                <xs:all>
+                    <xs:element name="input">
+                        <xs:complexType>
+                            <xs:choice>
+                                <xs:all>
+                                    <xs:element name="recursive"></xs:element>
+                                    <xs:element name="input.dir"></xs:element>
+                                </xs:all>
+                                <xs:element name="input.file"></xs:element>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="output">
+                        <xs:complexType>
+                            <xs:choice>
+                                <xs:element name=""></xs:element>
+                            </xs:choice>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="key">
+                        <xs:complexType>
+                            <xs:choice>
+                                <xs:all>
+                                    <xs:choice>
+                                        <xs:element name="key1" type="xs:string"></xs:element>
+                                        <xs:element name="key1safe" type="xs:string"></xs:element>
+                                    </xs:choice>
+                                    <xs:choice>
+                                        <xs:element name="key2" type="xs:string"></xs:element>
+                                        <xs:element name="key2safe" type="xs:string"></xs:element>
+                                    </xs:choice>
+                                    <xs:choice>
+                                        <xs:element name="key3" type="xs:string"></xs:element>                                
+                                        <xs:element name="key3safe" type="xs:string"></xs:element>                                
+                                    </xs:choice>
+                                </xs:all>
+                            </xs:choice>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:all>
+            </xs:complextype>
+        </xs:element>    
+    </xs:element>
+</xs:schema>

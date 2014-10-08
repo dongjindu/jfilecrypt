@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.yetaai.jfileencrypt;
+package com.yetaai.jfilecrypt;
 
 import com.sun.istack.internal.logging.Logger;
 import java.util.logging.Level;
